@@ -36,7 +36,7 @@ jobs:
           
           cat docker-compose-ci.yaml | envsubst > deploy/docker-compose.yaml
           cat .docker_env-ci | envsubst > deploy/.env
-#          mv ./nginx/conf.d/nginx.conf deploy/nginx.conf
+          mv ./nginx/conf.d/nginx.conf deploy/nginx.conf
           
 
       - name: copy files to server
@@ -45,7 +45,7 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
-          source: "deploy/docker-compose.yaml,deploy/.env"
+          source: "deploy/docker-compose.yaml,deploy/.env,deploy/nginx.conf"
           target: "app"
           strip_components: 1
       - name: deploy app
