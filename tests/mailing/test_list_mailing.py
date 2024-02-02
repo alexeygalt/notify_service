@@ -9,7 +9,7 @@ from tests import factories
 def test_list(client):
     boards = factories.MailingFactory.create_batch(5)
 
-    response = client.get(reverse('list_all_mailing'))
+    response = client.get(reverse("list_all_mailing"))
 
     expected_response = MailingListSerializer(instance=boards, many=True).data
 

@@ -6,13 +6,16 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('message', '0004_alter_message_client_id_alter_message_mailing_id'),
+        ("message", "0004_alter_message_client_id_alter_message_mailing_id"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='message',
-            name='send_status',
-            field=models.CharField(choices=[('sent', 'Отправлено'), ('not_sent', 'Не отправлено')], max_length=32),
+            model_name="message",
+            name="send_status",
+            field=models.CharField(
+                choices=[("sent", "Отправлено"), ("not_sent", "Не отправлено")],
+                max_length=32,
+            ),
         ),
     ]

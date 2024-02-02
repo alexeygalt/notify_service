@@ -6,13 +6,15 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('mailing', '0005_mailing_time_interval'),
+        ("mailing", "0005_mailing_time_interval"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='mailing',
-            name='time_interval',
-            field=models.CharField(blank=True, max_length=11, null=True, verbose_name='Временной интервал'),
+            model_name="mailing",
+            name="time_interval",
+            field=models.CharField(
+                blank=True, max_length=11, null=True, verbose_name="Временной интервал"
+            ),
         ),
     ]

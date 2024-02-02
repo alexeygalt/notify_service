@@ -11,11 +11,13 @@ app.autodiscover_tasks()
 app.conf.beat_schedule = {
     "api_call_and_send": {
         "task": "mailing.tasks.sending_mail",
-        "schedule": crontab(minute='*/1', ),
+        "schedule": crontab(
+            minute="*/1",
+        ),
     },
     "send_stats_to_email": {
         "task": "message.tasks.get_and_sent_stats",
         "schedule": crontab(minute=0, hour=0),
-        'args': (env.str('RECIPIENT_EMAIL'),),
+        "args": (env.str("RECIPIENT_EMAIL"),),
     },
 }

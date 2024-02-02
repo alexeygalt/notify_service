@@ -6,7 +6,6 @@ from rest_framework.exceptions import ValidationError
 
 
 class OAuthService(ABC):
-
     @staticmethod
     @abstractmethod
     def validate(auth_token: str):
@@ -22,10 +21,9 @@ class Google(OAuthService):
         Метод проверки токена. Запрашивает API Google oAUTH2 для получения информации о пользователе.
         """
         try:
-            id_info = id_token.verify_oauth2_token(
-                auth_token, Request())
+            id_info = id_token.verify_oauth2_token(auth_token, Request())
 
-            if 'accounts.google.com' in id_info['iss']:
+            if "accounts.google.com" in id_info["iss"]:
                 return id_info
 
         except Exception:
@@ -46,7 +44,7 @@ class Facebook(OAuthService):
         graph = facebook.GraphAPI(access_token=auth_token)
 
         try:
-            profile = graph.request('/me?fields=name,email')
+            profile = graph.request("/me?fields=name,email")
         except facebook.GraphAPIError:
             raise ValidationError("Токен недействителен, либо срок его действия истек.")
 

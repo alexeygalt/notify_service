@@ -15,7 +15,11 @@ def test_create_mailing(client):
         "time_interval": "08:00-17:00",
     }
 
-    response = client.post(reverse('create_mailing'), data=json.dumps(data), content_type='application/json')
+    response = client.post(
+        reverse("create_mailing"),
+        data=json.dumps(data),
+        content_type="application/json",
+    )
 
     assert response.status_code == 201
     assert Mailing.objects.count() == 1
@@ -33,20 +37,67 @@ def test_create_mailing(client):
 
 
 @pytest.mark.django_db
-@pytest.mark.parametrize("invalid_data, expected_status", [
-    ({"start_datetime": "2023-01-01T12:00:00Z", "end_datetime": "invalid_date", "message_text": "Test",
-      "client_filter": {"code": "123", "tag": "example"}, "time_interval": "08:00-17:00"}, 400),
-    ({"start_datetime": "invalid_date", "end_datetime": "2023-01-01T14:00:00Z", "message_text": "Test",
-      "client_filter": {"code": "123", "tag": "example"}, "time_interval": "08:00-17:00"}, 400),
-    ({"start_datetime": "2023-01-01T12:00:00Z", "end_datetime": "2023-01-01T14:00:00Z", "message_text": "Test",
-      "client_filter": {"code": "invalid_code", "tag": "example"}, "time_interval": "12:00-9:00"}, 400),
-    ({"start_datetime": "2023-01-01T12:00:00Z", "end_datetime": "2023-01-01T14:00:00Z", "message_text": "Test",
-      "client_filter": {"code": "123", "tag": "example"}, "time_interval": "invalid_interval"}, 400),
-    ({"start_datetime": "2023-02-01T12:00:00Z", "end_datetime": "2023-01-01T14:00:00Z", "message_text": "Test",
-      "client_filter": {"code": "123", "tag": "example"}, "time_interval": "invalid_interval"}, 400),
-])
+@pytest.mark.parametrize(
+    "invalid_data, expected_status",
+    [
+        (
+            {
+                "start_datetime": "2023-01-01T12:00:00Z",
+                "end_datetime": "invalid_date",
+                "message_text": "Test",
+                "client_filter": {"code": "123", "tag": "example"},
+                "time_interval": "08:00-17:00",
+            },
+            400,
+        ),
+        (
+            {
+                "start_datetime": "invalid_date",
+                "end_datetime": "2023-01-01T14:00:00Z",
+                "message_text": "Test",
+                "client_filter": {"code": "123", "tag": "example"},
+                "time_interval": "08:00-17:00",
+            },
+            400,
+        ),
+        (
+            {
+                "start_datetime": "2023-01-01T12:00:00Z",
+                "end_datetime": "2023-01-01T14:00:00Z",
+                "message_text": "Test",
+                "client_filter": {"code": "invalid_code", "tag": "example"},
+                "time_interval": "12:00-9:00",
+            },
+            400,
+        ),
+        (
+            {
+                "start_datetime": "2023-01-01T12:00:00Z",
+                "end_datetime": "2023-01-01T14:00:00Z",
+                "message_text": "Test",
+                "client_filter": {"code": "123", "tag": "example"},
+                "time_interval": "invalid_interval",
+            },
+            400,
+        ),
+        (
+            {
+                "start_datetime": "2023-02-01T12:00:00Z",
+                "end_datetime": "2023-01-01T14:00:00Z",
+                "message_text": "Test",
+                "client_filter": {"code": "123", "tag": "example"},
+                "time_interval": "invalid_interval",
+            },
+            400,
+        ),
+    ],
+)
 def test_create_mailing_invalid_data(client, invalid_data, expected_status):
-    response = client.post(reverse('create_mailing'), data=json.dumps(invalid_data), content_type='application/json')
+    response = client.post(
+        reverse("create_mailing"),
+        data=json.dumps(invalid_data),
+        content_type="application/json",
+    )
 
     assert response.status_code == expected_status
     assert Mailing.objects.count() == 0

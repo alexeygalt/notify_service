@@ -6,17 +6,22 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0001_initial'),
+        ("core", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='user',
-            options={'verbose_name': 'Пользователь', 'verbose_name_plural': 'Пользователи'},
+            name="user",
+            options={
+                "verbose_name": "Пользователь",
+                "verbose_name_plural": "Пользователи",
+            },
         ),
         migrations.AlterField(
-            model_name='user',
-            name='auth_provider',
-            field=models.CharField(default='email', max_length=32, verbose_name='Провайдер'),
+            model_name="user",
+            name="auth_provider",
+            field=models.CharField(
+                default="email", max_length=32, verbose_name="Провайдер"
+            ),
         ),
     ]

@@ -6,16 +6,15 @@ from django.urls import reverse
 
 @admin.register(Message)
 class MessageAdmin(admin.ModelAdmin):
-    list_display = ("id", "creation_datetime", "send_status", "mailing_link", "client_link")
-    search_fields = (
+    list_display = (
         "id",
-    )
-    ordering = (
-        "mailing_id",
+        "creation_datetime",
         "send_status",
-        "client_id",
-        "creation_datetime"
+        "mailing_link",
+        "client_link",
     )
+    search_fields = ("id",)
+    ordering = ("mailing_id", "send_status", "client_id", "creation_datetime")
     list_filter = ("send_status",)
 
     def mailing_link(self, message: Message):

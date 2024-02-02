@@ -6,22 +6,26 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('mailing', '0002_alter_mailing_options'),
+        ("mailing", "0002_alter_mailing_options"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='mailing',
-            name='client_properties_filter',
+            model_name="mailing",
+            name="client_properties_filter",
         ),
         migrations.AddField(
-            model_name='mailing',
-            name='client_filter_operator_code',
-            field=models.IntegerField(blank=True, null=True, verbose_name='Код мобильного оператора'),
+            model_name="mailing",
+            name="client_filter_operator_code",
+            field=models.IntegerField(
+                blank=True, null=True, verbose_name="Код мобильного оператора"
+            ),
         ),
         migrations.AddField(
-            model_name='mailing',
-            name='client_filter_tag',
-            field=models.CharField(blank=True, max_length=32, null=True, verbose_name='Тег клиента'),
+            model_name="mailing",
+            name="client_filter_tag",
+            field=models.CharField(
+                blank=True, max_length=32, null=True, verbose_name="Тег клиента"
+            ),
         ),
     ]

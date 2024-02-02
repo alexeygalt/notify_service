@@ -10,22 +10,44 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('client', '0001_initial'),
-        ('mailing', '__first__'),
+        ("client", "0001_initial"),
+        ("mailing", "__first__"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Message',
+            name="Message",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('creation_datetime', models.DateTimeField(default=django.utils.timezone.now)),
-                ('send_status', models.CharField(max_length=32)),
-                ('client_id', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='client.client')),
-                ('mailing_id', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='mailing.mailing')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "creation_datetime",
+                    models.DateTimeField(default=django.utils.timezone.now),
+                ),
+                ("send_status", models.CharField(max_length=32)),
+                (
+                    "client_id",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="client.client"
+                    ),
+                ),
+                (
+                    "mailing_id",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="mailing.mailing",
+                    ),
+                ),
             ],
             options={
-                'ordering': ['creation_datetime'],
+                "ordering": ["creation_datetime"],
             },
         ),
     ]

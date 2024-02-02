@@ -7,18 +7,43 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Mailing',
+            name="Mailing",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('start_datetime', models.DateTimeField(verbose_name='Дата и время запуска рассылки')),
-                ('end_datetime', models.DateTimeField(verbose_name='Дата и время окончания рассылки')),
-                ('message_text', models.TextField(verbose_name='Текст сообщения')),
-                ('client_properties_filter', models.CharField(choices=[('mobile_code', 'Мобильный код'), ('tag', 'Тег (произвольная метка)')], max_length=32, verbose_name='Фильтр свойств клиентов')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "start_datetime",
+                    models.DateTimeField(verbose_name="Дата и время запуска рассылки"),
+                ),
+                (
+                    "end_datetime",
+                    models.DateTimeField(
+                        verbose_name="Дата и время окончания рассылки"
+                    ),
+                ),
+                ("message_text", models.TextField(verbose_name="Текст сообщения")),
+                (
+                    "client_properties_filter",
+                    models.CharField(
+                        choices=[
+                            ("mobile_code", "Мобильный код"),
+                            ("tag", "Тег (произвольная метка)"),
+                        ],
+                        max_length=32,
+                        verbose_name="Фильтр свойств клиентов",
+                    ),
+                ),
             ],
         ),
     ]

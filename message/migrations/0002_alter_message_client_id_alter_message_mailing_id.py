@@ -7,20 +7,28 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('client', '0001_initial'),
-        ('mailing', '0001_initial'),
-        ('message', '0001_initial'),
+        ("client", "0001_initial"),
+        ("mailing", "0001_initial"),
+        ("message", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='message',
-            name='client_id',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='client', to='client.client'),
+            model_name="message",
+            name="client_id",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="client",
+                to="client.client",
+            ),
         ),
         migrations.AlterField(
-            model_name='message',
-            name='mailing_id',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='mailing', to='mailing.mailing'),
+            model_name="message",
+            name="mailing_id",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="mailing",
+                to="mailing.mailing",
+            ),
         ),
     ]

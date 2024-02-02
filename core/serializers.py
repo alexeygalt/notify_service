@@ -41,4 +41,11 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 class UserBase(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'email', 'auth_provider', 'last_login', 'date_joined', 'is_active')
+        fields = (
+            "id",
+            "email",
+            "auth_provider",
+            "last_login",
+            "date_joined",
+            "is_active",
+        )

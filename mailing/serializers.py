@@ -6,7 +6,7 @@ from message.models import Message
 import logging
 import datetime
 
-logger = logging.getLogger('app')
+logger = logging.getLogger("app")
 
 
 class ClientFilterSerializer(serializers.Serializer):
@@ -21,17 +21,19 @@ class MailingBaseSerializer(serializers.ModelSerializer):
     )
     time_interval = serializers.CharField(
         max_length=11,
-        help_text='Формат временного интервала: HH:mm-HH:mm', required=False
+        help_text="Формат временного интервала: HH:mm-HH:mm",
+        required=False,
     )
-    CLIENT_FILTER_CHOICES = ('mobile_code', 'tag')
+    CLIENT_FILTER_CHOICES = ("mobile_code", "tag")
 
     def validate(self, data):
-        start_datetime = data['start_datetime']
-        end_datetime = data['end_datetime']
+        start_datetime = data["start_datetime"]
+        end_datetime = data["end_datetime"]
 
         if start_datetime >= end_datetime:
             raise serializers.ValidationError(
-                "Дата и время начала рассылки должны быть раньше даты и времени окончания рассылки")
+                "Дата и время начала рассылки должны быть раньше даты и времени окончания рассылки"
+            )
 
         return data
 
@@ -39,7 +41,7 @@ class MailingBaseSerializer(serializers.ModelSerializer):
 
         valid = super().is_valid(raise_exception=False)
         if not valid:
-            logger.error(f'Validation errors: {self.errors}')
+            logger.error(f"Validation errors: {self.errors}")
             return super().is_valid(raise_exception=True)
 
         return super().is_valid(raise_exception=True)
@@ -47,14 +49,14 @@ class MailingBaseSerializer(serializers.ModelSerializer):
     def validate_time_interval(self, value):
 
         try:
-            start_str, end_str = value.split('-')
-            start_time = datetime.datetime.strptime(start_str, '%H:%M').time()
-            end_time = datetime.datetime.strptime(end_str, '%H:%M').time()
+            start_str, end_str = value.split("-")
+            start_time = datetime.datetime.strptime(start_str, "%H:%M").time()
+            end_time = datetime.datetime.strptime(end_str, "%H:%M").time()
         except ValueError:
-            raise ValidationError('Invalid time interval format')
+            raise ValidationError("Invalid time interval format")
 
         if start_time >= end_time:
-            raise ValidationError('Start time must be before end time')
+            raise ValidationError("Start time must be before end time")
 
         return value
 
@@ -64,10 +66,9 @@ class MailingBaseSerializer(serializers.ModelSerializer):
 
 
 class CreateMailingSerializer(MailingBaseSerializer):
-
     def create(self, validated_data):
         instance = super().create(validated_data)
-        logger.info(f'Object {instance} created successfully')
+        logger.info(f"Object {instance} created successfully")
         return instance
 
     class Meta:
@@ -76,10 +77,9 @@ class CreateMailingSerializer(MailingBaseSerializer):
 
 
 class UpdateMailingSerializer(MailingBaseSerializer):
-
     def update(self, instance, validated_data):
         instance = super().update(instance, validated_data)
-        logger.info(f'Object {instance} updated successfully')
+        logger.info(f"Object {instance} updated successfully")
         return instance
 
     class Meta:
@@ -92,10 +92,14 @@ class MailingListSerializer(MailingBaseSerializer):
     not_sent_messages = serializers.SerializerMethodField(read_only=True)
 
     def get_set_messages(self, obj: Mailing):
-        return Message.objects.filter(mailing_id=obj, send_status=Message.MessageStatus.SENT).count()
+        return Message.objects.filter(
+            mailing_id=obj, send_status=Message.MessageStatus.SENT
+        ).count()
 
     def get_not_sent_messages(self, obj: Mailing):
-        return Message.objects.filter(mailing_id=obj, send_status=Message.MessageStatus.NOT_SENT).count()
+        return Message.objects.filter(
+            mailing_id=obj, send_status=Message.MessageStatus.NOT_SENT
+        ).count()
 
     class Meta:
         model = Mailing

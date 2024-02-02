@@ -13,7 +13,6 @@ class ClientAdmin(admin.ModelAdmin):
         "mobile_operator_code",
         "tag",
         "timezone",
-
     )
     ordering = (
         "id",

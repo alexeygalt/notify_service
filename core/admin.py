@@ -7,15 +7,17 @@ from django.utils.safestring import mark_safe
 
 @admin.register(User)
 class UserAdmin(UserAdmin):
-    list_display = ("id", "email_link", "auth_provider",)
+    list_display = (
+        "id",
+        "email_link",
+        "auth_provider",
+    )
     search_fields = (
         "email__startswith",
         "id",
     )
     list_filter = ("auth_provider",)
-    ordering = (
-        "auth_provider",
-    )
+    ordering = ("auth_provider",)
     fieldsets = (
         (
             None,
@@ -28,7 +30,6 @@ class UserAdmin(UserAdmin):
                     "is_active",
                     "date_joined",
                     "last_login",
-
                 )
             },
         ),

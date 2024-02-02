@@ -32,8 +32,8 @@ class UserDAO:
     def _get_tokens_for_user(user_orm: User) -> dict:
         refresh = RefreshToken.for_user(user_orm)
         return {
-            'refresh': str(refresh),
-            'access': str(refresh.access_token),
+            "refresh": str(refresh),
+            "access": str(refresh.access_token),
         }
 
     @staticmethod
@@ -42,17 +42,21 @@ class UserDAO:
         if user:
             if provider == user.auth_provider:
                 return {
-                    'email': user.email,
-                    'tokens': UserDAO._get_tokens_for_user(user)}
+                    "email": user.email,
+                    "tokens": UserDAO._get_tokens_for_user(user),
+                }
             else:
                 raise AuthenticationFailed(
-                    detail='Please continue your login using ' + user.auth_provider)
+                    detail="Please continue your login using " + user.auth_provider
+                )
 
         else:
             user_password = password_generator()
-            user = UserDAO._create_social_user(email=email, provider=provider, password=user_password)
+            user = UserDAO._create_social_user(
+                email=email, provider=provider, password=user_password
+            )
             return {
-                'email': user.email,
-                'password': user_password,
-                'tokens': UserDAO._get_tokens_for_user(user)
+                "email": user.email,
+                "password": user_password,
+                "tokens": UserDAO._get_tokens_for_user(user),
             }

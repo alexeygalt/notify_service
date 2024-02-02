@@ -9,9 +9,19 @@ class User(AbstractUser):
         FACEBOOK = "google", "google"
         EMAIL = "email", "email"
 
-    email = models.EmailField("email address", blank=True, unique=True,)
+    email = models.EmailField(
+        "email address",
+        blank=True,
+        unique=True,
+    )
     username = models.CharField(max_length=32, null=True, blank=True, unique=False)
-    auth_provider = models.CharField(max_length=32, blank=False, null=False, default=AuthProvider.EMAIL,verbose_name="Провайдер")
+    auth_provider = models.CharField(
+        max_length=32,
+        blank=False,
+        null=False,
+        default=AuthProvider.EMAIL,
+        verbose_name="Провайдер",
+    )
 
     objects = UserManager()
     USERNAME_FIELD = "email"

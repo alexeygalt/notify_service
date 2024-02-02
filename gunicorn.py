@@ -6,14 +6,12 @@ def max_workers():
     return cpu_count()
 
 
-bind = '0.0.0.0:' + environ.get('PORT', '8000')
+bind = "0.0.0.0:" + environ.get("PORT", "8000")
 max_requests = 1000
-worker_class = 'gevent'
+worker_class = "gevent"
 workers = max_workers()
 
-env = {
-    'DJANGO_SETTINGS_MODULE': 'main.settings'
-}
+env = {"DJANGO_SETTINGS_MODULE": "main.settings"}
 
 reload = True
-name = 'notif_service'
+name = "notif_service"

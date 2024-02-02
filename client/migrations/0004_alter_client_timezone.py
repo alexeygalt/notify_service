@@ -6,13 +6,15 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('client', '0003_alter_client_tag'),
+        ("client", "0003_alter_client_tag"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='client',
-            name='timezone',
-            field=models.CharField(blank=True, max_length=32, null=True, verbose_name='Часовой пояс'),
+            model_name="client",
+            name="timezone",
+            field=models.CharField(
+                blank=True, max_length=32, null=True, verbose_name="Часовой пояс"
+            ),
         ),
     ]
