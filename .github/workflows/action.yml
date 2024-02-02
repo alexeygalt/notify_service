@@ -62,6 +62,9 @@ jobs:
 
 #test
 
+#test
+
+
 #echo ${{ secrets.SSH_PASSWORD }} | sudo -S cp -r   ./nginx deploy
 
 
