@@ -3,7 +3,7 @@ version: "3.7"
 services:
   app:
     #    command: sh -c "poetry run python -u manage.py runserver 0.0.0.0:8000"
-    image: alexeygalt/django_game:$GITHUB_REF_NAME-$GITHUB_RUN_ID
+    image: alexeygalt/notif:$GITHUB_REF_NAME-$GITHUB_RUN_ID
     env_file:
       - .env
     ports:
@@ -22,7 +22,7 @@ services:
 
 
   migration:
-    image: alexeygalt/django_game:$GITHUB_REF_NAME-$GITHUB_RUN_ID
+    image: alexeygalt/notif:$GITHUB_REF_NAME-$GITHUB_RUN_ID
     env_file:
       - .env
     #    environment:
@@ -100,7 +100,7 @@ services:
 
   worker:
     restart: always
-    image: alexeygalt/django_game:$GITHUB_REF_NAME-$GITHUB_RUN_ID
+    image: alexeygalt/notif:$GITHUB_REF_NAME-$GITHUB_RUN_ID
     env_file:
       - .env
     depends_on:
@@ -114,7 +114,7 @@ services:
 
   beat:
     restart: always
-    image: alexeygalt/django_game:$GITHUB_REF_NAME-$GITHUB_RUN_ID
+    image: alexeygalt/notif:$GITHUB_REF_NAME-$GITHUB_RUN_ID
     env_file:
       - .env
     depends_on:
@@ -138,7 +138,7 @@ services:
 
 
   collect_static:
-    image: alexeygalt/django_game:$GITHUB_REF_NAME-$GITHUB_RUN_ID
+    image: alexeygalt/notif:$GITHUB_REF_NAME-$GITHUB_RUN_ID
     env_file:
       - .env
     entrypoint: ""
