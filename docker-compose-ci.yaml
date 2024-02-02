@@ -1,0 +1,155 @@
+version: "3.7"
+
+services:
+  app:
+    #    command: sh -c "poetry run python -u manage.py runserver 0.0.0.0:8000"
+    image: alexeygalt/django_game:$GITHUB_REF_NAME-$GITHUB_RUN_ID
+    env_file:
+      - .env
+    ports:
+      - "0.0.0.0:8000:8000"
+    #    command: sh -c "poetry run python -u manage.py runserver 0.0.0.0:8000"
+    command: sh -c "poetry run gunicorn -c gunicorn.py main.wsgi"
+    depends_on:
+      migration:
+        condition: service_completed_successfully
+      postgres:
+        condition: service_healthy
+    volumes:
+      - media_data:/usr/src/app/media
+      - ./.env:/usr/src/app/.env
+    restart: unless-stopped
+
+
+  migration:
+    image: alexeygalt/django_game:$GITHUB_REF_NAME-$GITHUB_RUN_ID
+    env_file:
+      - .env
+    #    environment:
+    #      - DOCKER_DEFAULT_PLATFORM=${DOCKER_DEFAULT_PLATFORM}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    #    entrypoint: poetry run python manage.py migrate
+
+    entrypoint: |
+      sh -c "
+      poetry run python manage.py migrate"
+    volumes:
+      - ./.env:/usr/src/app/.env
+
+  postgres:
+    image: postgres:15
+    #    env_file:
+    #      - .env
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "5432:5432"
+    healthcheck:
+      #      test: [ "CMD-SHELL", "pg_isready -U $POSTGRES_USER -d $POSTGRES_DB" ]
+      test: [ "CMD-SHELL", "sh -c 'pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}'" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  nginx:
+    image: nginx:1.23.1
+    #    platform: linux/arm64
+    restart: always
+    volumes:
+      #      - ./config/nginx:/etc/nginx/templates
+      #      - ./nginx/conf.d/:/etc/nginx/conf.d/
+      - ./nginx:/etc/nginx/conf.d
+      - django_static:/usr/share/nginx/html/static/
+    #      - .:/usr/src/app
+    ports:
+      - "80:80"
+    depends_on:
+      app:
+        condition: service_started
+      collect_static:
+        condition: service_completed_successfully
+  #  nginx:
+  #    build: ./nginx
+  #    ports:
+  #      - 80:80
+  #    depends_on:
+  #      - app
+  prometheus:
+    image: prom/prometheus
+    volumes:
+      - ./prometheus/:/etc/prometheus/
+    ports:
+      - "9090:9090"
+
+  grafana:
+    image: grafana/grafana:6.5.2
+    ports:
+      - 3060:3000
+
+  redis:
+    image: redis
+    restart: always
+    ports:
+      - "6379:6379"
+
+  worker:
+    restart: always
+    image: alexeygalt/django_game:$GITHUB_REF_NAME-$GITHUB_RUN_ID
+    env_file:
+      - .env
+    depends_on:
+      - redis
+      - app
+    volumes:
+      - .:/usr/src/app/
+    command: sh -c "poetry run celery -A main worker -l info --logfile=logs/celery_worker.log"
+
+
+
+  beat:
+    restart: always
+    image: alexeygalt/django_game:$GITHUB_REF_NAME-$GITHUB_RUN_ID
+    env_file:
+      - .env
+    depends_on:
+      - redis
+      - app
+      - worker
+    volumes:
+      - .:/usr/src/app/
+    command: sh -c "poetry run celery -A main beat -l info --logfile=logs/celery_beat.log"
+
+
+  flower:
+    restart: always
+    build: .
+    ports:
+      - "127.0.0.1:5555:5555"
+    depends_on:
+      - worker
+      - redis
+    command: [ "poetry", "run", "celery", "-A", "main" ,"flower" ]
+
+
+  collect_static:
+    image: alexeygalt/django_game:$GITHUB_REF_NAME-$GITHUB_RUN_ID
+    env_file:
+      - .env
+    entrypoint: ""
+    volumes:
+      - django_static:/usr/src/app/static/
+    command: sh -c "poetry run python manage.py collectstatic -c --no-input"
+
+
+volumes:
+  postgres_data:
+  media_data:
+  django_static:
+
+#test
