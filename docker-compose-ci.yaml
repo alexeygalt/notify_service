@@ -35,8 +35,8 @@ services:
     entrypoint: |
       sh -c "
       poetry run python manage.py migrate"
-    volumes:
-      - ./.env:/usr/src/app/.env
+#    volumes:
+#      - ./.env:/usr/src/app/.env
 
   postgres:
     image: postgres:15
