@@ -128,7 +128,7 @@ services:
 
   flower:
     restart: always
-    build: .
+    image: alexeygalt/notif:$GITHUB_REF_NAME-$GITHUB_RUN_ID
     ports:
       - "127.0.0.1:5555:5555"
     depends_on:
