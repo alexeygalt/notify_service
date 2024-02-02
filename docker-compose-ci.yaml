@@ -83,7 +83,7 @@ services:
   prometheus:
     image: prom/prometheus
     volumes:
-      - ./prometheus/:/etc/prometheus/
+      - /usr/src/app/prometheus/:/etc/prometheus/
     ports:
       - "9090:9090"
 
@@ -107,7 +107,7 @@ services:
       - redis
       - app
     volumes:
-      - .:/usr/src/app/
+      - ./:/usr/src/app/
     command: sh -c "poetry run celery -A main worker -l info --logfile=logs/celery_worker.log"
 
 
@@ -122,13 +122,15 @@ services:
       - app
       - worker
     volumes:
-      - .:/usr/src/app/
+      - ./:/usr/src/app/
     command: sh -c "poetry run celery -A main beat -l info --logfile=logs/celery_beat.log"
 
 
   flower:
     restart: always
     image: alexeygalt/notif:$GITHUB_REF_NAME-$GITHUB_RUN_ID
+    env_file:
+      - .env
     ports:
       - "127.0.0.1:5555:5555"
     depends_on:
