@@ -83,7 +83,7 @@ services:
   prometheus:
     image: prom/prometheus
     volumes:
-      - /usr/src/app/prometheus/:/etc/prometheus/
+      - /usr/src/app/prometheus:/etc/prometheus/
     ports:
       - "9090:9090"
 
@@ -108,9 +108,11 @@ services:
       - redis
       - app
     volumes:
-      - ./:/usr/src/app/
-    command: sh -c "poetry run celery -A main worker -l info --logfile=logs/celery_worker.log"
-
+      - .:/usr/src/app/
+#    command: sh -c "poetry run celery -A main worker -l info --logfile=logs/celery_worker.log"
+    entrypoint: |
+      sh -c "
+      poetry run celery -A main worker -l info --logfile=logs/celery_worker.log"
 
 
   beat:
@@ -120,13 +122,15 @@ services:
     env_file:
       - .env
     depends_on:
-      - redis
+      - redisdocker run -it image_name sh
       - app
       - worker
     volumes:
-      - ./:/usr/src/app/
-    command: sh -c "poetry run celery -A main beat -l info --logfile=logs/celery_beat.log"
-
+      - .:/usr/src/app/
+#    command: sh -c "poetry run celery -A main beat -l info --logfile=logs/celery_beat.log"
+    entrypoint: |
+      sh -c "
+      poetry run celery -A main worker -l info --logfile=logs/celery_worker.log"
 
   flower:
     restart: always
