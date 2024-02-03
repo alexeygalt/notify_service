@@ -126,7 +126,7 @@ services:
       - app
       - worker
     volumes:
-      - .:/usr/src/app/
+      - .:/usr/src/app/poetry
 #    command: sh -c "poetry run celery -A main beat -l info --logfile=logs/celery_beat.log"
     entrypoint: |
       sh -c "
