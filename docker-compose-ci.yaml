@@ -83,7 +83,7 @@ services:
   prometheus:
     image: prom/prometheus
     volumes:
-      - /usr/src/app/prometheus:/etc/prometheus/
+      - ./prometheus:/etc/prometheus/
     ports:
       - "9090:9090"
 
@@ -108,7 +108,7 @@ services:
       - redis
       - app
     volumes:
-      - .:/usr/src/app/
+      - ./poetry:/usr/src/app/
 #    command: sh -c "poetry run celery -A main worker -l info --logfile=logs/celery_worker.log"
     entrypoint: |
       sh -c "
@@ -126,7 +126,7 @@ services:
       - app
       - worker
     volumes:
-      - .:/usr/src/app/poetry
+      - ./poetry:/usr/src/app/
 #    command: sh -c "poetry run celery -A main beat -l info --logfile=logs/celery_beat.log"
     entrypoint: |
       sh -c "
