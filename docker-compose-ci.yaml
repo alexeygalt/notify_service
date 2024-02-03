@@ -114,9 +114,10 @@ services:
       - ./poetry:/usr/src/app/
       - ./.env:/usr/src/app/.env
 #    command: sh -c "poetry run celery -A main worker -l info --logfile=logs/celery_worker.log"
-    entrypoint: |
-      sh -c "
-      poetry run celery -A main worker -l info --logfile=logs/celery_worker.log"
+    command: [ "poetry", "run", "celery", "-A", "worker" ,"beat" ]
+#    entrypoint: |
+#      sh -c "
+#      poetry run celery -A main worker -l info --logfile=logs/celery_worker.log"
 
 
   beat:
@@ -126,16 +127,20 @@ services:
     env_file:
       - .env
     depends_on:
-      - redis
-      - app
-      - worker
+      redis:
+        condition: service_started
+      app:
+        condition: service_started
+      worker:
+        condition: service_started
     volumes:
       - ./poetry:/usr/src/app/
       - ./.env:/usr/src/app/.env
 #    command: sh -c "poetry run celery -A main beat -l info --logfile=logs/celery_beat.log"
-    entrypoint: |
-      sh -c "
-      poetry run celery -A main worker -l info --logfile=logs/celery_worker.log"
+    command: [ "poetry", "run", "celery", "-A", "main" ,"beat" ]
+#    entrypoint:
+#      sh -c "
+#      poetry run celery -A main worker -l info --logfile=logs/celery_worker.log"
 
   flower:
     restart: always
