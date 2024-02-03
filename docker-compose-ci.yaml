@@ -101,7 +101,7 @@ services:
   worker:
     restart: always
     image: alexeygalt/notif:$GITHUB_REF_NAME-$GITHUB_RUN_ID
-    working_dir: /usr/src/app/
+#    working_dir: /usr/src/app/
     env_file:
       - .env
     depends_on:
@@ -118,7 +118,7 @@ services:
   beat:
     restart: always
     image: alexeygalt/notif:$GITHUB_REF_NAME-$GITHUB_RUN_ID
-    working_dir: /usr/src/app/
+#    working_dir: /usr/src/app/
     env_file:
       - .env
     depends_on:
