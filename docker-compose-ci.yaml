@@ -110,11 +110,11 @@ services:
       app:
         condition: service_started
 
-    volumes:
-      - ./poetry:/usr/src/app/
-      - ./.env:/usr/src/app/.env
-#    command: sh -c "poetry run celery -A main worker -l info --logfile=logs/celery_worker.log"
-    command: [ "poetry", "run", "celery", "-A", "worker" ,"beat" ]
+#    volumes:
+#      - ./poetry:/usr/src/app/
+#      - ./.env:/usr/src/app/.env
+    command: sh -c "poetry run celery -A main worker -l info --logfile=logs/celery_worker.log"
+#    command: [ "poetry", "run", "celery", "-A", "worker" ,"beat" ]
 #    entrypoint: |
 #      sh -c "
 #      poetry run celery -A main worker -l info --logfile=logs/celery_worker.log"
@@ -133,11 +133,11 @@ services:
         condition: service_started
       worker:
         condition: service_started
-    volumes:
-      - ./poetry:/usr/src/app/
-      - ./.env:/usr/src/app/.env
-#    command: sh -c "poetry run celery -A main beat -l info --logfile=logs/celery_beat.log"
-    command: [ "poetry", "run", "celery", "-A", "main" ,"beat" ]
+#    volumes:
+#      - ./poetry:/usr/src/app/
+#      - ./.env:/usr/src/app/.env
+    command: sh -c "poetry run celery -A main beat -l info --logfile=logs/celery_beat.log"
+#    command: [ "poetry", "run", "celery", "-A", "main" ,"beat" ]
 #    entrypoint:
 #      sh -c "
 #      poetry run celery -A main worker -l info --logfile=logs/celery_worker.log"
@@ -150,8 +150,10 @@ services:
     ports:
       - "5555:5555"
     depends_on:
-      - worker
-      - redis
+      redis:
+        condition: service_started
+      worker:
+        condition: service_started
     command: [ "poetry", "run", "celery", "-A", "main" ,"flower" ]
 
 
