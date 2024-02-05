@@ -3,8 +3,6 @@ version: "3.7"
 services:
   app:
     build: .
-    #    ports:
-    #      - "0.0.0.0:8000:8000"
     command: sh -c "poetry run gunicorn -c gunicorn.py main.wsgi"
     expose:
       - 8000
@@ -22,8 +20,6 @@ services:
   migration:
     build:
       context: .
-    #    environment:
-    #      - DOCKER_DEFAULT_PLATFORM=${DOCKER_DEFAULT_PLATFORM}
     depends_on:
       postgres:
         condition: service_healthy
@@ -54,13 +50,8 @@ services:
     image: nginx:1.23.1
     platform: linux/arm64
     restart: always
-    #    environment:
-    #      - DOCKER_DEFAULT_PLATFORM=${DOCKER_DEFAULT_PLATFORM}
     volumes:
-      #      - ./config/nginx:/etc/nginx/templates
-      #      - .:/usr/src/app
       - ./nginx/conf.d/:/etc/nginx/conf.d/
-      #      - ./static/:/usr/share/nginx/html/static/
       - django_static:/usr/share/nginx/html/static/
     ports:
       - "80:80"

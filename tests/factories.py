@@ -3,7 +3,6 @@ import factory
 from faker import providers
 from client.models import Client
 from faker import Faker
-
 from mailing.models import Mailing
 
 fake = Faker("ru_RU")

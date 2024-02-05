@@ -1,8 +1,5 @@
 name: Build_and_deploy_action
-#on:
-#  push:
-#    branches:
-#      - master
+
 on: [ push ]
 jobs:
   build_and_push:
@@ -68,20 +65,4 @@ jobs:
           script: |
             cd app
             echo ${{ secrets.SSH_PASSWORD }} | sudo -S docker compose up -d 
-#            echo ${{ secrets.SSH_PASSWORD }} | sudo -S docker compose logs
 
-
-#test
-
-#test
-
-
-
-#echo ${{ secrets.SSH_PASSWORD }} | sudo -S cp -r   ./nginx deploy
-
-
-#          echo ${{ secrets.SSH_PASSWORD }} | sudo -S cp -r   ./nginx/conf.d/nginx.conf deploy/nginx.conf
-#          echo ${{ secrets.SSH_PASSWORD }} | sudo -S cp   ./nginx/conf.d/nginx.conf deploy/nginx.conf
-
-#          mv ./nginx/conf.d/nginx.conf deploy/nginx.conf
-#          mv ./nginx/conf.d/nginx.conf deploy/nginx/nginx.conf

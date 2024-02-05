@@ -10,5 +10,4 @@ COPY poetry.lock ./
 COPY pyproject.toml ./
 RUN poetry install
 
-#COPY . ./
 COPY . .

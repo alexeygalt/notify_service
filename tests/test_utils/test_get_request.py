@@ -2,7 +2,6 @@ import pytest
 import requests
 from unittest.mock import patch
 from mailing.tasks import get_request
-from main.settings import env
 
 
 @pytest.fixture

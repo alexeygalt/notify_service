@@ -21,7 +21,6 @@ class UserDAO:
 
     @staticmethod
     def _create_social_user(email: str, provider: str, password: str) -> User:
-        # user = User.objects.create_user(email=email, password=env.str('SOCIAL_SECRET'))
         user = User.objects.create_user(email=email, password=password)
         user.is_active = True
         user.auth_provider = provider

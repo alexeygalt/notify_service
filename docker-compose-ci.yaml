@@ -5,8 +5,6 @@ services:
     image: alexeygalt/notif:$GITHUB_REF_NAME-$GITHUB_RUN_ID
     env_file:
       - .env
-#    ports:
-#      - "0.0.0.0:8000:8000"
     command: sh -c "poetry run gunicorn -c gunicorn.py main.wsgi"
     depends_on:
       migration:

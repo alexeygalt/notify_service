@@ -16,7 +16,7 @@ def send_emails(recipient_email: str, message_url: str):
         msg = EmailMessage(
             subject, message_url, email_from, [recipient_email], connection=connection
         )
-        msg.content_subtype = "html"  # Main content is now text/html
+        msg.content_subtype = "html"
         msg.send()
 
     return
