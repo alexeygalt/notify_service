@@ -32,9 +32,13 @@ services:
         condition: service_healthy
     #    entrypoint: poetry run python manage.py migrate
 
+#    entrypoint: |
+#      sh -c "
+#      poetry run python manage.py migrate"
     entrypoint: |
       sh -c "
-      poetry run python manage.py migrate"
+      poetry run python manage.py migrate &&
+      poetry run python manage.py loaddata fixtures/users.json"
 #    volumes:
 #      - ./.env:/usr/src/app/.env
 
