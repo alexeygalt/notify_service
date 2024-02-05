@@ -8,12 +8,15 @@ USER_MODEL = get_user_model()
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
     password_repeat = serializers.CharField(write_only=True)
+    password = serializers.CharField(write_only=True)
 
     class Meta:
         model = USER_MODEL
         fields = (
             "id",
             "email",
+            "password",
+            "password_repeat",
         )
         extra_kwargs = {"password_repeat": {"write_only": True}}
 
