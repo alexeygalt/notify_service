@@ -2,13 +2,11 @@ version: "3.7"
 
 services:
   app:
-    #    command: sh -c "poetry run python -u manage.py runserver 0.0.0.0:8000"
     image: alexeygalt/notif:$GITHUB_REF_NAME-$GITHUB_RUN_ID
     env_file:
       - .env
-    ports:
-      - "0.0.0.0:8000:8000"
-    #    command: sh -c "poetry run python -u manage.py runserver 0.0.0.0:8000"
+#    ports:
+#      - "0.0.0.0:8000:8000"
     command: sh -c "poetry run gunicorn -c gunicorn.py main.wsgi"
     depends_on:
       migration:
@@ -25,27 +23,17 @@ services:
     image: alexeygalt/notif:$GITHUB_REF_NAME-$GITHUB_RUN_ID
     env_file:
       - .env
-    #    environment:
-    #      - DOCKER_DEFAULT_PLATFORM=${DOCKER_DEFAULT_PLATFORM}
     depends_on:
       postgres:
         condition: service_healthy
-    #    entrypoint: poetry run python manage.py migrate
-
-#    entrypoint: |
-#      sh -c "
-#      poetry run python manage.py migrate"
     entrypoint: |
       sh -c "
       poetry run python manage.py migrate &&
       poetry run python manage.py loaddata fixtures/users.json"
-#    volumes:
-#      - ./.env:/usr/src/app/.env
+
 
   postgres:
     image: postgres:15
-    #    env_file:
-    #      - .env
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -53,7 +41,6 @@ services:
     ports:
       - "5432:5432"
     healthcheck:
-      #      test: [ "CMD-SHELL", "pg_isready -U $POSTGRES_USER -d $POSTGRES_DB" ]
       test: [ "CMD-SHELL", "sh -c 'pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}'" ]
       interval: 5s
       timeout: 5s
@@ -63,14 +50,10 @@ services:
 
   nginx:
     image: nginx:1.23.1
-    #    platform: linux/arm64
     restart: always
     volumes:
-      #      - ./config/nginx:/etc/nginx/templates
-      #      - ./nginx/conf.d/:/etc/nginx/conf.d/
       - ./nginx:/etc/nginx/conf.d
       - django_static:/usr/share/nginx/html/static/
-    #      - .:/usr/src/app
     ports:
       - "80:80"
     depends_on:
@@ -78,12 +61,7 @@ services:
         condition: service_started
       collect_static:
         condition: service_completed_successfully
-  #  nginx:
-  #    build: ./nginx
-  #    ports:
-  #      - 80:80
-  #    depends_on:
-  #      - app
+
   prometheus:
     image: prom/prometheus
     volumes:
@@ -105,7 +83,6 @@ services:
   worker:
     restart: always
     image: alexeygalt/notif:$GITHUB_REF_NAME-$GITHUB_RUN_ID
-#    working_dir: /usr/src/app/
     env_file:
       - .env
     depends_on:
@@ -114,20 +91,12 @@ services:
       app:
         condition: service_started
 
-#    volumes:
-#      - ./poetry:/usr/src/app/
-#      - ./.env:/usr/src/app/.env
     command: sh -c "poetry run celery -A main worker -l info --logfile=logs/celery_worker.log"
-#    command: [ "poetry", "run", "celery", "-A", "worker" ,"beat" ]
-#    entrypoint: |
-#      sh -c "
-#      poetry run celery -A main worker -l info --logfile=logs/celery_worker.log"
 
 
   beat:
     restart: always
     image: alexeygalt/notif:$GITHUB_REF_NAME-$GITHUB_RUN_ID
-#    working_dir: /usr/src/app/
     env_file:
       - .env
     depends_on:
@@ -137,14 +106,8 @@ services:
         condition: service_started
       worker:
         condition: service_started
-#    volumes:
-#      - ./poetry:/usr/src/app/
-#      - ./.env:/usr/src/app/.env
+
     command: sh -c "poetry run celery -A main beat -l info --logfile=logs/celery_beat.log"
-#    command: [ "poetry", "run", "celery", "-A", "main" ,"beat" ]
-#    entrypoint:
-#      sh -c "
-#      poetry run celery -A main worker -l info --logfile=logs/celery_worker.log"
 
   flower:
     restart: always
@@ -175,6 +138,3 @@ volumes:
   postgres_data:
   media_data:
   django_static:
-
-#test
-#0ad37c05b6c5
