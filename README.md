@@ -82,3 +82,4 @@ python ./manage.py runserver
 * Flower service ``` localhost:5555``` 
 * Тесты ``` pytest --cov``` 
 * Логи  ```app.log celery_beat.log celery_worker.log``` 
+* CI/CD настроен на   ```http://alexeygalt.ru/docs/``` 
