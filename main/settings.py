@@ -77,15 +77,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "main.wsgi.application"
 
-# Database
-# https://docs.djangoproject.com/en/5.0/ref/settings/#databases
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': 'mydatabase', # This is where you put the name of the db file.
-#                  # If one doesn't exist, it will be created at migration time.
-#     }
-# }
+
 DATABASES = {
     "default": env.db(),
 }
@@ -154,13 +146,10 @@ SIMPLE_JWT = {
 
 
 # Celery and Redis settings
-
-# CELERY_BROKER_URL = "redis://redis:6379/0"
 CELERY_BROKER_URL = (
     "redis://" + env.str("REDIS_HOST") + ":" + env.str("REDIS_PORT") + "/0"
 )
 CELERY_BROKER_TRANSPORT_OPTIONS = {"visibility_timeout": 3600}
-# CELERY_RESULT_BACKEND = "redis://redis:6379/0"
 CELERY_RESULT_BACKEND = (
     "redis://" + env.str("REDIS_HOST") + ":" + env.str("REDIS_PORT") + "/0"
 )
