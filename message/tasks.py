@@ -20,7 +20,10 @@ def get_and_sent_stats(email):
         mailing.messages.filter(send_status=Message.MessageStatus.SENT).count()
         for mailing in completed_mailings
     ]
-    percent = round(sum(all_sent_messages) / sum(all_messages), 2)
+    try:
+        percent = round(sum(all_sent_messages) / sum(all_messages), 2)
+    except ZeroDivisionError:
+        percent = 0
 
     ctx = {
         "time": f"Текущее время {timezone.now()}",
